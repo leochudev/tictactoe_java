@@ -30,11 +30,11 @@ public class GameBoard{
 			while (!isValidInput){
 				step = players[round%2].nextStep();
 
-				if (board[step]!=0){
-					System.out.printf("Position %d is already input.\n", step);
-				} else if (step < 0 && step >=9){
+				if (step < 0 || step >=9){
 					System.out.printf("Invalid input.\n", step);
-				} else {
+				}else if (board[step]!=0){
+					System.out.printf("Position %d is already input.\n", step);
+				}  else {
 					isValidInput = true;
 					board[step] = players[round%2].getType();
 				}
