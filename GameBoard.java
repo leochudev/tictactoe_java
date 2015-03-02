@@ -1,48 +1,20 @@
 public class GameBoard{
-	private int round;
 	private int winner; // 1 for player X and 2 for player O
-	private GamePlayer players[];
 
 	int board[] = {		0, 0, 0, 
 						0, 0, 0,
 						0, 0, 0};
 
 	public GameBoard(){ // constructor
-		round = winner = 0;
-
-		players = new GamePlayer[2];
-		players[0] = new GamePlayer(1);
-		players[1] = new GamePlayer(2);
-
-		startGame();
+		winner = 0;
 	}
 
-	public void startGame(){
-		int step;
-		boolean isValidInput;
-
-		printBoard();
-		while (winner == 0 && !isGameBoardFull()){
-			round++;
-			step = -1;
-			isValidInput = false;
-			
-			while (!isValidInput){
-				step = players[round%2].nextStep();
-
-				if (step < 0 || step >=9){
-					System.out.printf("Invalid input.\n", step);
-				}else if (board[step]!=0){
-					System.out.printf("Position %d is already input.\n", step);
-				}  else {
-					isValidInput = true;
-					board[step] = players[round%2].getType();
-				}
-			}
-			printBoard();
-			checkWinner();
+	public boolean inputStep(int step, int type){
+		if (board[step]!=0){
+			return false;
 		}
-		printWinner();
+		board[step] = type;
+		return true;
 	}
 
 	public boolean isGameBoardFull(){
@@ -62,13 +34,16 @@ public class GameBoard{
 		}
 	}
 
+	public int getWinner(){
+		return winner;
+	}
+
 	public int checkWinner(){
-		int i;
-		boolean isWin = false;
-		
+		int i, j=0;
 		for(i = 0; i < 3; i++){
-			if (board[i] == board[i+1] && board[i] == board[i+2] && board[i] != 0){ // for horizontal
-				winner = board[i];
+			j = i*3;
+			if (board[j] == board[j+1] && board[j] == board[j+2] && board[j] != 0){ // for horizontal
+				winner = board[j];
 				return winner;
 			}
 
@@ -83,15 +58,15 @@ public class GameBoard{
 			return winner;
 		}
 
-		if (board[2] == board[4] && board[0] == board[6] && board[0] != 0){ // for diagonal /
-			winner = board[0];
+		if (board[2] == board[4] && board[2] == board[6] && board[0] != 0){ // for diagonal /
+			winner = board[2];
 			return winner;
 		}
 
 		return 0;
 	}
 
-	public void printBoard(){
+	public void printBoard(int round){
 		int i;
 		System.out.printf("\nRound %d\n", round);
 		System.out.println("-----------");
